@@ -56,10 +56,6 @@ Mainly, I like having choices and the current landscape of the discord bots is f
 
 When it is stable.. that is far away from now..
 
-#### When stable release?
-
-When it is stable.. that is far away from now..
-
 
 ## ![Contributions](https://github.com/user-attachments/assets/cea40986-d301-45e7-bf71-1fcb0cee5c67)
 
