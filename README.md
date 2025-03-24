@@ -73,9 +73,7 @@ This project is licensed under the [GNU GPLv3 License](LICENSE).
 
 For any questions or suggestions, feel free to open an issue or reach out via GitHub or Join our [Discord Community Server](https://discord.gg/D96MATaPBe)
 
-## ![CREDITS]()
-To do
----
+##
 
 Enjoy using GNUBot! Made with ♥️ by GNUBot Team 
 
