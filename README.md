@@ -21,9 +21,9 @@ GNUBot is an open-source bot built using JavaScript. It is designed to be free a
 
 <h4>
  <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Getting Started.png">
-  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Getting Started.png">
-  <img alt="Getting Started" src="img/readme/dark/Getting Started.png">
+  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Getting-Started.png">
+  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Getting-Started.png">
+  <img alt="Getting Started" src="img/readme/dark/Getting-Started.png">
  </picture>
 </h4>
 
@@ -61,9 +61,9 @@ npm start
 ```
 <h4>
  <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Frequently Asked Questions.png">
-  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Frequently Asked Questions.png">
-  <img alt="FAQ" src="img/readme/dark/Frequently Asked Questions.png">
+  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Frequently-Asked-Questions.png">
+  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Frequently-Asked-Questions.png">
+  <img alt="FAQ" src="img/readme/dark/Frequently-Asked-Questions.png">
  </picture>
 </h4>
 
@@ -78,9 +78,9 @@ When it is stable.. that is far away from now..
 
 <h4>
  <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Want to Contribute.png">
-  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Want to Contribute.png">
-  <img alt="Contributions" src="img/readme/dark/Want to Contribute.png">
+  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Want-to-Contribute.png">
+  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Want-to-Contribute.png">
+  <img alt="Contributions" src="img/readme/dark/Want-to-Contribute.png">
  </picture>
 </h4>
 
@@ -98,9 +98,9 @@ This project is licensed under the [GNU GPLv3 License](LICENSE).
 
 <h4>
  <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Join us at our Discord Server!.png">
-  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Join us at our Discord Server!.png">
-  <img alt="Join Us" src="img/readme/dark/Join us at our Discord Server!.png">
+  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Join-us-at-our-Discord-Server!.png">
+  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Join-us-at-our-Discord-Server!.png">
+  <img alt="Join Us" src="img/readme/dark/Join-us-at-our-Discord-Server!.png">
  </picture>
 </h4>
 
