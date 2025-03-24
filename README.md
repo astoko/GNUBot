@@ -8,14 +8,24 @@ GNUBot is an open-source bot built using JavaScript. It is designed to be free a
 - Your members will never encounter advertisements by GNUBot.
 - Subscription fees will never be part of GNUBot's model.
 
-## ![Features](https://github.com/user-attachments/assets/df36100a-676e-4ff1-9135-cd34178147e4)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Features.png">
+  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Features.png">
+  <img alt="Features" src="img/readme/dark/Features.png">
+</picture>
 
+#
 - User-friendly deployment with an setup script to help you along the way.
 - Easy local deployment with minimal hasle.
 - Open-source and free to use for all.
 
-## ![Getting Started](https://github.com/user-attachments/assets/202fb2a7-f36a-47a2-af95-18c78393fcc7)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Getting Started.png">
+  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Getting Started.png">
+  <img alt="Getting Started" src="img/readme/dark/Getting Started.png">
+</picture>
 
+#
 ### Prerequisites
 
 Ensure you have the following installed:
@@ -24,7 +34,7 @@ Ensure you have the following installed:
 
 ### Installation
 
-1. Clone the repository:
+1. Clone the repository
 ```bash
 git clone https://github.com/astoko/GNUBot.git
 ```
@@ -49,8 +59,13 @@ To start the bot, run:
 npm start
 ```
 
-## ![FAQ](https://github.com/user-attachments/assets/5f2b61a8-c62e-4d2b-8c06-b5d30ed6f072)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Frequently Asked Questions.png">
+  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Frequently Asked Questions.png">
+  <img alt="FAQ" src="img/readme/dark/Frequently Asked Questions.png">
+</picture>
 
+#
 #### Why make this? Why Open Source?
 
 Mainly, I like having choices and the current landscape of the discord bots is full of bots that charge way too much for fuctionality that is provided by discord them selfs like the ability to get welcome messages or goodbye messages.. So.. that is about it, making features free of subscription monopoly that in my prospective it seems there is an bunch of.
@@ -59,18 +74,31 @@ Mainly, I like having choices and the current landscape of the discord bots is f
 
 When it is stable.. that is far away from now..
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Want to Contribute.png">
+  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Want to Contribute.png">
+  <img alt="Contributions" src="img/readme/dark/Want to Contribute.png">
+</picture>
 
-## ![Contributions](https://github.com/user-attachments/assets/cea40986-d301-45e7-bf71-1fcb0cee5c67)
-
+#
 Contributions are welcome! Please read the [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
-## ![License](https://github.com/user-attachments/assets/6807b257-ce5a-4cb2-966f-267c175a6f7a)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/License.png">
+  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/License.png">
+  <img alt="License" src="img/readme/dark/License.png">
+</picture>
 
-
+#
 This project is licensed under the [GNU GPLv3 License](LICENSE).
 
-## 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Join us at our Discord Server!.png">
+  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Join us at our Discord Server!.png">
+  <img alt="Join Us" src="img/readme/dark/Join us at our Discord Server!.png">
+</picture>
 
+#
 For any questions or suggestions, feel free to open an issue or reach out via GitHub or Join our [Discord Community Server](https://discord.gg/D96MATaPBe)
 
 ##
