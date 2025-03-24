@@ -7,25 +7,26 @@ GNUBot is an open-source bot built using JavaScript. It is designed to be free a
 - It will never demand payment for its services.
 - Your members will never encounter advertisements by GNUBot.
 - Subscription fees will never be part of GNUBot's model.
-
-<picture>
+<h1>
+ <picture>
   <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Features.png">
   <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Features.png">
   <img alt="Features" src="img/readme/dark/Features.png">
-</picture>
+ </picture>
+</h1>
 
-#
 - User-friendly deployment with an setup script to help you along the way.
 - Easy local deployment with minimal hasle.
 - Open-source and free to use for all.
 
-<picture>
+<h1>
+ <picture>
   <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Getting Started.png">
   <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Getting Started.png">
   <img alt="Getting Started" src="img/readme/dark/Getting Started.png">
-</picture>
+ </picture>
+</h1>
 
-#
 ### Prerequisites
 
 Ensure you have the following installed:
@@ -58,14 +59,15 @@ To start the bot, run:
 ```bash
 npm start
 ```
-
-<picture>
+<h1>
+ <picture>
   <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Frequently Asked Questions.png">
   <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Frequently Asked Questions.png">
   <img alt="FAQ" src="img/readme/dark/Frequently Asked Questions.png">
-</picture>
+ </picture>
+</h1>
 
-#
+
 #### Why make this? Why Open Source?
 
 Mainly, I like having choices and the current landscape of the discord bots is full of bots that charge way too much for fuctionality that is provided by discord them selfs like the ability to get welcome messages or goodbye messages.. So.. that is about it, making features free of subscription monopoly that in my prospective it seems there is an bunch of.
@@ -74,34 +76,37 @@ Mainly, I like having choices and the current landscape of the discord bots is f
 
 When it is stable.. that is far away from now..
 
-<picture>
+<h1>
+ <picture>
   <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Want to Contribute.png">
   <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Want to Contribute.png">
   <img alt="Contributions" src="img/readme/dark/Want to Contribute.png">
-</picture>
+ </picture>
+</h1>
 
-#
 Contributions are welcome! Please read the [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
-<picture>
+<h1>
+ <picture>
   <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/License.png">
   <source media="(prefers-color-scheme: light)" srcset="img/readme/light/License.png">
   <img alt="License" src="img/readme/dark/License.png">
-</picture>
+ </picture>
+</h1>
 
-#
 This project is licensed under the [GNU GPLv3 License](LICENSE).
 
-<picture>
+<h1>
+ <picture>
   <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Join us at our Discord Server!.png">
   <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Join us at our Discord Server!.png">
   <img alt="Join Us" src="img/readme/dark/Join us at our Discord Server!.png">
-</picture>
+ </picture>
+</h1>
 
-#
 For any questions or suggestions, feel free to open an issue or reach out via GitHub or Join our [Discord Community Server](https://discord.gg/D96MATaPBe)
 
-##
+#
 
 Enjoy using GNUBot! Made with ♥️ by GNUBot Team 
 
