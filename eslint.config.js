@@ -9,6 +9,7 @@ module.exports = [
 				require: 'readonly',
 				__dirname: 'readonly',
 				module: 'readonly',
+				console: 'readonly',
 				process: 'readonly',
 				setTimeout: 'readonly',
 				setInterval: 'readonly',
