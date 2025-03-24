@@ -39,6 +39,9 @@ cd GNUBot
 npm install
 ```
 
+4. Config the bot:
+To be done.
+
 ### Running the Bot
 
 To start the bot, run:
