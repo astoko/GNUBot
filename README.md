@@ -78,16 +78,6 @@ When it is stable.. that is far away from now..
 
 <h4>
  <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Want-to-Contribute.png">
-  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Want-to-Contribute.png">
-  <img alt="Contributions" src="img/readme/dark/Want-to-Contribute.png">
- </picture>
-</h4>
-
-Contributions are welcome! Please read the [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
-
-<h4>
- <picture>
   <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/License.png">
   <source media="(prefers-color-scheme: light)" srcset="img/readme/light/License.png">
   <img alt="License" src="img/readme/dark/License.png">
