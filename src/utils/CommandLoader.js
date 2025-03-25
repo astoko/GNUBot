@@ -1,4 +1,4 @@
-const { FileLoader } = require('./FileLoader');
+const FileLoader = require('./FileLoader');
 const { REST, Routes, SlashCommandBuilder } = require('discord.js');
 const token = process.env.token;
 const { clientId, guildId } = require('../../config.json');
@@ -36,9 +36,9 @@ async function loadCommands(client) {
 					commands.push(createCommandStatus(commandName, false));
 				}
 				else {
-					await client.commands.set(command.name, command);
-					commandsArray.push(command);
-					commands.push(createCommandStatus(command.name, true));
+					await client.commands.set(command.data.name, command);
+					commandsArray.push(command.data.toJSON());
+					commands.push(createCommandStatus(command.data.name, true));
 				}
 			}
 			catch (error) {

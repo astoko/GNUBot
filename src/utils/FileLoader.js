@@ -27,7 +27,7 @@ class FileLoader {
 		try {
 			const globPattern = path.join(process.cwd(), dirName, '**/*.js').replace(/\\/g, '/');
 			const files = await glob(globPattern);
-			const jsFiles = files.filter(file => file.extname(file) === '.js');
+			const jsFiles = files.filter(file => path.extname(file) === '.js');
 
 			await Promise.all(jsFiles.map(file => {
 				this.deleteCachedFile(file);

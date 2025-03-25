@@ -1,4 +1,5 @@
-const { FileLoader } = require('./FileLoader');
+const FileLoader = require('./FileLoader');
+const { Events } = require('discord.js');
 
 /**
  * @typedef {Object} EventStatus
@@ -11,7 +12,10 @@ const createEventStatus = (name, success) => ({
 });
 const getEventName = (file) => file.split('/').pop().slice(0, -3);
 const isValidEvent = (event) => {
-	event && event.name && (!event.disabled || event.disabled !== true);
+	return event &&
+           event.name &&
+           (Object.values(Events).includes(event.name)) &&
+           (!event.disabled || event.disabled !== true);
 };
 
 async function loadEvents(client) {
@@ -37,7 +41,7 @@ async function loadEvents(client) {
 					await target[event.once ? 'once' : 'on'](event.name, execute);
 					await client.events.set(event.name, execute);
 
-					events.push(createEventStatus(eventName. true));
+					events.push(createEventStatus(eventName, true));
 				}
 			}
 			catch (error) {
