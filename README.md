@@ -111,6 +111,6 @@ For any questions or suggestions, feel free to open an issue or reach out via Gi
 
 ![GNUBot Roadmap](img/readme/Roadmap.png)
 
-Enjoy using GNUBot! Made with ♥️ by GNUBot Team.
+Enjoy using GNUBot! Made with ♥️ by GNUBot Team
 
 Concider Contributing to the project and soon enough (if i even set this up) buy me some coffee! 
