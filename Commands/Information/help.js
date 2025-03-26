@@ -24,7 +24,7 @@ module.exports = {
 				.setRequired(false),
 		),
 	disabled: false,
-	permissions: [ PermissionFlagsBits.Administrator ],
+	permissions: [],
 
 	/**
      * Handles command autocompletetion choices
@@ -58,7 +58,7 @@ module.exports = {
 
 			if (!command) {
 				return await interaction.editReply({
-					content: 'Command not found.',
+					content: '❌ Command not found.',
 					flags: ['Ephemeral'],
 				});
 			}
@@ -71,7 +71,8 @@ module.exports = {
 				.addFields(
 					{ name: 'Status', value: command.disabled ? '🔴 Disabled' : '🟢 Enabled', inline: true },
 					{ name: 'Required Permissions', value: `\`${permissionNames.join(', ')}\``, inline: true },
-				);
+				)
+				.setTimestamp();
 
 			return await interaction.editReply({ embeds: [commandEmbed] });
 		}
@@ -113,7 +114,8 @@ module.exports = {
 			const embed = new EmbedBuilder()
 				.setTitle('Help Menu')
 				.setDescription('ℹ️ Select a Command Directory from the dropdown menu below to view commands in that directory.\n\nYou can view in-depth info by running:\n- /help <command_name>')
-				.setColor('Green');
+				.setColor('Green')
+				.setTimestamp();
 
 			const row = new ActionRowBuilder().addComponents(selectMenu);
 			const response = await interaction.editReply({
@@ -150,7 +152,8 @@ module.exports = {
 						currentEmbed = new EmbedBuilder()
 							.setTitle(`${selectedDirectory} Commands (Page ${pageCount})`)
 							.setDescription('List of all commands in this Directory')
-							.setColor('Green');
+							.setColor('Green')
+							.setTimestamp();
 
 						currentFields = [];
 						currentCharCount = currentEmbed.data.title.length + currentEmbed.data.description.length;

@@ -9,8 +9,10 @@ module.exports = {
 	name: Events.InteractionCreate,
 
 	/**
-     * @param {AutocompleteInteraction} interaction
-     * @param {Client} client
+     * Executes autocomplete interaction
+     * @param {AutocompleteInteraction} interaction - Autocomplete interaction object
+     * @param {Client} client - Discord client instance
+     * @returns {Promise<void>}
      */
 	async execute(interaction, client) {
 		if (!interaction.isAutocomplete()) return;

@@ -13,9 +13,11 @@ module.exports = {
 	name: Events.InteractionCreate,
 
 	/**
-	 * @param {ChatInputCommandInteraction} interaction
-	 * @param {Client} client
-	 */
+     * Executes command interaction
+     * @param {ChatInputCommandInteraction} interaction - Command interaction object
+     * @param {Client} client - Discord client instance
+     * @returns {Promise<void>}
+     */
 	async execute(interaction, client) {
 		if (!interaction.isChatInputCommand()) return;
 

@@ -13,6 +13,7 @@ module.exports = [
 				process: 'readonly',
 				setTimeout: 'readonly',
 				setInterval: 'readonly',
+				clearTimeout: 'readonly',
 			},
 		},
 		rules: {
