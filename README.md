@@ -51,7 +51,8 @@ npm install
 ```
 
 4. Config the bot:
-To be done.
+Configure the .env with your bot's token, and config the config.json with the necessary information.
+For more information, check out the wiki.
 
 ### Running the Bot
 
@@ -74,7 +75,7 @@ Mainly, I like having choices and the current landscape of the discord bots is f
 
 #### When stable release?
 
-When it is stable.. that is far away from now..
+When it is made stable, the bot is still in the works and changes are likely.
 
 <h4>
  <picture>
