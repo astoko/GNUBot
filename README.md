@@ -35,6 +35,9 @@ Ensure you have the following installed:
 
 ### Installation
 
+> [!CAUTION]
+> At the time of writing, the codebase and features mentioned are still in development. As a result, the following "Install Guide" describes a Not Yet Implemented Feature. This warning will be removed in version 0.1
+
 1. Clone the repository
 ```bash
 git clone https://github.com/astoko/GNUBot.git
@@ -111,6 +114,6 @@ For any questions or suggestions, feel free to open an issue or reach out via Gi
 
 ![GNUBot Roadmap](img/readme/Roadmap.png)
 
-Enjoy using GNUBot! Made with ♥️ by GNUBot Team
+Enjoy using GNUBot! Made with ♥️ by GNUBot Team.
 
 Concider Contributing to the project and soon enough (if i even set this up) buy me some coffee! 
