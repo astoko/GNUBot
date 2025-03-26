@@ -73,7 +73,7 @@ npm start
 
 #### Why make this? Why Open Source?
 
-Mainly, I like having choices and the current landscape of the discord bots is full of bots that charge way too much for fuctionality that is provided by discord them selfs like the ability to get welcome messages or goodbye messages.. So.. that is about it, making features free of subscription monopoly that in my prospective it seems there is an bunch of.
+I prefer having choices. Many Discord bots charge for basic features that Discord already provides, like welcome messages. This project makes those features free, breaking away from unnecessary subscriptions.
 
 #### When stable release?
 
