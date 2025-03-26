@@ -57,7 +57,7 @@ module.exports = {
 			const command = await interaction.client.commands.get(commandName);
 
 			if (!command) {
-				return interaction.editReply({
+				return await interaction.editReply({
 					content: 'Command not found.',
 					flags: ['Ephemeral'],
 				});
@@ -88,8 +88,8 @@ module.exports = {
 							.filter(file => file.endsWith('.js'));
 
 						commandsByDirectory[folder] = files
-							.map(file => {
-								const command = interaction.client.commands.get(file.slice(0, -3));
+							.map(async (file) => {
+								const command = await interaction.client.commands.get(file.slice(0, -3));
 
 								return command?.data && !command.deleted ? {
 									name: command.data.name,
@@ -187,13 +187,13 @@ module.exports = {
 			console.error('Error in help command:', error);
 
 			if (!interaction.replied && !interaction.deferred) {
-				return interaction.reply({
+				return await interaction.reply({
 					content: 'An error occurred while fetching commands.',
 					flags: ['Ephemeral'],
 				});
 			}
 
-			return interaction.editReply({
+			return await interaction.editReply({
 				content: 'An error occurred while fetching commands.',
 				embeds: [],
 				components: [],
