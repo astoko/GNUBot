@@ -1,6 +1,6 @@
 # GNUBot | An Open-Source Discord Bot
 
-![GNUBot Banner](https://github.com/user-attachments/assets/b90b880e-62f3-4eb8-934a-91c01f4a1ae2)
+![GNUBot Header](img/readme/Header.png)
 
 GNUBot is an open-source bot built using JavaScript. It is designed to be free as in freedom and price, offering a user-friendly deployment experience in local environments. GNUBot adheres to the following principles:
 
@@ -107,6 +107,9 @@ This project is licensed under the [GNU GPLv3 License](LICENSE).
 For any questions or suggestions, feel free to open an issue or reach out via GitHub or Join our [Discord Community Server](https://discord.gg/D96MATaPBe)
 
 #
+
+
+![GNUBot Roadmap](img/readme/Roadmap.png)
 
 Enjoy using GNUBot! Made with ♥️ by GNUBot Team 
 
