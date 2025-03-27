@@ -54,7 +54,7 @@ module.exports = {
 		catch (error) {
 			console.error('Error in reload command:', error);
 			return await interaction.editReply({
-				content: '❌ An error occured while reloading. The developers have been notified.',
+				content: '❌ An error occured while reloading.',
 				flags: ['Ephemeral'],
 			});
 		}

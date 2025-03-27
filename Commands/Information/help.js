@@ -65,11 +65,11 @@ module.exports = {
 
 			const permissionNames = await GetPermissionNames(command.permissions || []);
 			const commandEmbed = new EmbedBuilder()
-				.setTitle(`Command: ${command.data.name}`)
+				.setTitle(`ℹ️ Command: ${command.data.name}`)
 				.setDescription(command.data.description)
 				.setColor('Green')
 				.addFields(
-					{ name: 'Status', value: command.disabled ? '🔴 Disabled' : '🟢 Enabled', inline: true },
+					{ name: 'Status', value: command.disabled ? '❌ Disabled' : '✅ Enabled', inline: true },
 					{ name: 'Required Permissions', value: `\`${permissionNames.join(', ')}\``, inline: true },
 				)
 				.setTimestamp();
@@ -112,8 +112,8 @@ module.exports = {
 				);
 
 			const embed = new EmbedBuilder()
-				.setTitle('Help Menu')
-				.setDescription('ℹ️ Select a Command Directory from the dropdown menu below to view commands in that directory.\n\nYou can view in-depth info by running:\n- /help <command_name>')
+				.setTitle('ℹ️ Help Menu')
+				.setDescription('Select a Command Directory from the dropdown menu below to view commands in that directory.\n\nYou can view in-depth info by running:\n- /help <command_name>')
 				.setColor('Green')
 				.setTimestamp();
 
@@ -150,7 +150,7 @@ module.exports = {
 
 						pageCount++;
 						currentEmbed = new EmbedBuilder()
-							.setTitle(`${selectedDirectory} Commands (Page ${pageCount})`)
+							.setTitle(`ℹ️ ${selectedDirectory} Commands (Page ${pageCount})`)
 							.setDescription('List of all commands in this Directory')
 							.setColor('Green')
 							.setTimestamp();
@@ -191,13 +191,13 @@ module.exports = {
 
 			if (!interaction.replied && !interaction.deferred) {
 				return await interaction.reply({
-					content: 'An error occurred while fetching commands.',
+					content: '❌ An error occurred while fetching commands.',
 					flags: ['Ephemeral'],
 				});
 			}
 
 			return await interaction.editReply({
-				content: 'An error occurred while fetching commands.',
+				content: '❌ An error occurred while fetching commands.',
 				embeds: [],
 				components: [],
 				flags: ['Ephemeral'],

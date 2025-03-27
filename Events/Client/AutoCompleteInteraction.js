@@ -27,7 +27,7 @@ module.exports = {
 
 		if (!command) {
 			await client.commands.delete(interaction.commandName);
-			return await sendError(`Command \`${interaction.commandName}\` is invalid.`);
+			return await sendError(`❌ Command \`${interaction.commandName}\` is invalid.`);
 		}
 
 		try {

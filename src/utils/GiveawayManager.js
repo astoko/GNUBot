@@ -98,7 +98,7 @@ class GiveawayManager {
 			await channel.send({
 				content: winners.length ?
 					`🎉 Congratulations ${winnerMentions}! You won **${giveaway.prize}**!` :
-					'No valid winners for this giveaway!',
+					'😞 No participants have joined, so no winners were chosen!',
 				allowedMentions: { users: winners },
 			});
 

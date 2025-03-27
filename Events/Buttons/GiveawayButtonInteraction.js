@@ -20,14 +20,14 @@ module.exports = {
 
 			if (!giveaway) {
 				return interaction.editReply({
-					content: 'Could not find this giveaway!',
+					content: '❌ Could not find this giveaway!',
 					flags: ['Ephemeral'],
 				});
 			}
 
 			if (giveaway.ended === true || giveaway.ended === 'true' || giveaway.ended === '1') {
 				return interaction.editReply({
-					content: 'This giveaway has ended!',
+					content: '❌ This giveaway has ended!',
 					flags: ['Ephemeral'],
 				});
 			}
@@ -35,7 +35,7 @@ module.exports = {
 			const userId = interaction.user.id;
 			if (giveaway.participants.includes(userId)) {
 				return interaction.editReply({
-					content: 'You have already joined this giveaway!',
+					content: '❌ You have already joined this giveaway!',
 					flags: ['Ephemeral'],
 				});
 			}
@@ -53,14 +53,14 @@ module.exports = {
 			});
 
 			return interaction.editReply({
-				content: 'You have joined the giveaway!',
+				content: '✅ You have joined the giveaway!',
 				flags: ['Ephemeral'],
 			});
 		}
 		catch (error) {
 			console.error('Error in giveaway button interaction:', error);
 			return interaction.editReply({
-				content: 'Failed to join the giveaway. Please try again. The developers have been notified of this error.',
+				content: '❌ Failed to join the giveaway. Please try again.',
 				flags: ['Ephemeral'],
 			});
 		}

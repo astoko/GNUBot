@@ -23,6 +23,7 @@ module.exports = {
 		await interaction.deferReply();
 
 		const embed = new EmbedBuilder()
+			.setTitle('ℹ️ Latency Information')
 			.setDescription(`Latency: ${Date.now() - start}ms\nAPI Latency: ${Math.round(client.ws.ping)}ms`)
 			.setColor('Green')
 			.setTimestamp();

@@ -35,7 +35,7 @@ module.exports = {
 
 		const duration = parseDuration(durationStr);
 		if (!duration) {
-			return interaction.reply({ content: 'Invalid duration format! Use 1m, 1h, 1d etc.', flags: ['Ephemeral'] });
+			return interaction.reply({ content: '❌ Invalid duration format! Use 1m, 1h, 1d etc.', flags: ['Ephemeral'] });
 		}
 
 		const giveaway = await GiveawayManager.create({

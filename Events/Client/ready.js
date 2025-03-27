@@ -18,6 +18,6 @@ module.exports = {
 		await GiveawayManager.initialize(client);
 		await loadCommands(client);
 
-		console.log(`${client.user.tag} is now online.`);
+		console.log(`✅ ${client.user.tag} is now online.`);
 	},
 };
