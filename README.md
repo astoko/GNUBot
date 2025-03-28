@@ -7,6 +7,11 @@ GNUBot is an open-source bot built using JavaScript. It is designed to be free a
 - It will never demand payment for its services.
 - Your members will never encounter advertisements by GNUBot.
 - Subscription fees will never be part of GNUBot's model.
+
+> [!WARNING]  
+> The dev branch is actively being developed, may contain bugs, and is not recommended for production use.    
+> **Proceed with caution!**
+
 <h4>
  <picture>
   <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Features.png">
@@ -36,7 +41,8 @@ Ensure you have the following installed:
 ### Installation
 
 > [!CAUTION]
-> At the time of writing, the codebase and features mentioned are still in development. As a result, the following "Install Guide" describes a Not Yet Implemented Feature. This warning will be removed in version 0.1
+> At the time of writing, the codebase and features mentioned are still in development.    
+> Dev Branch is not recommended for production use. **Proceed with caution!**
 
 1. Clone the repository
 ```bash
