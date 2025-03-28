@@ -1,7 +1,7 @@
 const FileLoader = require('./FileLoader');
 const { REST, Routes, SlashCommandBuilder } = require('discord.js');
 const token = process.env.token;
-const { clientId, guildId } = require('../../config.json');
+const { guildId } = require('../../config.json');
 const rest = new REST().setToken(token);
 
 /**
@@ -51,7 +51,7 @@ async function loadCommands(client) {
 			console.log('Started refreshing application (/) commands');
 
 			await rest.put(
-				Routes.applicationGuildCommands(clientId, guildId),
+				Routes.applicationGuildCommands(client.user.id, guildId),
 				{ body: commandsArray },
 			);
 

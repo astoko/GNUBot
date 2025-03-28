@@ -1,10 +1,8 @@
-/* eslint-disable no-unused-vars */
 const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
-const DatabaseManager = require('./DatabaseManager');
+const GiveawaySchema = require('../../Database/GiveawaySchema');
 
 class GiveawayManager {
 	constructor() {
-		this.giveaways = null;
 		this.client = null;
 		this.timeouts = new Map();
 	}
@@ -15,33 +13,16 @@ class GiveawayManager {
      */
 	async initialize(client) {
 		this.client = client;
-		this.giveaways = DatabaseManager.collection('GiveawaySchema');
 		await this.checkGiveaways();
 	}
 
 	/**
-     * Clear all active timeouts
-     */
-	clearTimeouts() {
-		for (const [messageId, timeout] of this.timeouts) {
-			clearTimeout(timeout);
-		}
-		this.timeouts.clear();
-	}
-
-
-	/**
      * Create a new giveaway
-     * @param {Object} params - Giveaway parameters
-     * @param {string} params.channelId - Channel ID where giveaway is hosted
-     * @param {string} params.guildId - Guild ID where giveaway is hosted
-     * @param {string} params.prize - Giveaway prize
-     * @param {number} params.winnerCount - Number of winners
-     * @param {number} params.duration - Duration in milliseconds
-     * @param {string} params.hosterId - User ID of giveaway host
+     * @param {Object} params Giveaway parameters
+     * @returns {Promise<Document>} Created giveaway document
      */
 	async create(params) {
-		const giveaway = {
+		const giveaway = new GiveawaySchema({
 			messageId: null,
 			channelId: params.channelId,
 			guildId: params.guildId,
@@ -51,108 +32,150 @@ class GiveawayManager {
 			hosterId: params.hosterId,
 			participants: [],
 			ended: false,
-			winners: [],
-		};
+		});
 
-		const saved = await this.giveaways.insertOne(giveaway);
-		return saved;
+		return await giveaway.save();
 	}
 
 	/**
      * End a giveaway
-     * @param {string} messageId - Message ID of the giveaway
+     * @param {string} messageId Giveaway message ID
      */
 	async end(messageId) {
-		const giveaway = await this.giveaways.findOne({ messageId });
-		if (!giveaway || giveaway.ended) return null;
+		const giveaway = await GiveawaySchema.findOne({
+			messageId,
+			ended: false,
+		});
 
-		await this.giveaways.updateOne(
-			{ messageId },
-			{ $set: { ended: true } },
+		if (!giveaway) return null;
+
+		const winners = await this.selectWinners(giveaway.participants, giveaway.winnerCount, giveaway.guildId);
+		const updatedGiveaway = await GiveawaySchema.findOneAndDelete(
+			{ messageId, ended: false },
 		);
 
-		const winners = this.selectWinners(giveaway.participants, giveaway.winnerCount);
-		await this.giveaways.updateOne(
-			{ messageId },
-			{ $set: { winners } },
-		);
+		if (!updatedGiveaway) return null;
 
-		if (this.timeouts.has(messageId)) {
-			clearTimeout(this.timeouts.get(messageId));
-			this.timeouts.delete(messageId);
-		}
+		this.clearTimeout(messageId);
 
 		try {
 			const channel = await this.client?.channels.fetch(giveaway.channelId);
-			if (!channel) return { ...giveaway, winners };
+			if (!channel) return updatedGiveaway;
 
 			const message = await channel.messages.fetch(messageId);
-			if (!message) return { ...giveaway, winners };
+			if (!message) return updatedGiveaway;
 
 			await message.edit({
-				embeds: [this.createEmbed({ ...giveaway, winners }, true)],
+				embeds: [this.createEmbed(updatedGiveaway, true)],
 				components: [this.createButtons(true)],
 			});
 
 			const winnerMentions = winners.map(id => `<@${id}>`).join(', ');
 			await channel.send({
-				content: winners.length ?
+				content: giveaway.participants.length && winnerMentions.length ?
 					`🎉 Congratulations ${winnerMentions}! You won **${giveaway.prize}**!` :
-					'😞 No participants have joined, so no winners were chosen!',
+					'😞 No participants have joined, so no winners were chosen! (The participant(s) may have left the server)',
 				allowedMentions: { users: winners },
 			});
-
 		}
 		catch (error) {
 			console.error('Error ending giveaway:', error);
 		}
 
-		return { ...giveaway, winners };
+		return updatedGiveaway;
 	}
 
 	/**
-     * Check and schedule all active giveaways
+     * Handle giveaway message deletion
+     * @param {string} messageId Giveaway message ID
+     */
+	async end_messageDeleted(messageId) {
+		const giveaway = await GiveawaySchema.findOneAndDelete({ messageId });
+		if (!giveaway || giveaway.ended) return null;
+
+		this.clearTimeout(messageId);
+
+		try {
+			const channel = await this.client?.channels.fetch(giveaway.channelId);
+			if (channel) {
+				await channel.send({
+					content: '😞 The giveaway message was deleted!',
+				});
+			}
+		}
+		catch (error) {
+			console.error('Error handling deleted giveaway:', error);
+		}
+
+		return giveaway;
+	}
+
+	/**
+     * Check and schedule active giveaways
      */
 	async checkGiveaways() {
-		const activeGiveaways = await this.giveaways.find({ ended: false });
+		const activeGiveaways = await GiveawaySchema.find({
+			ended: false,
+			endTime: { $gt: Date.now() },
+		});
+
 		for (const giveaway of activeGiveaways) {
-			this.scheduleGiveaway(giveaway);
+			await this.scheduleGiveaway(giveaway);
+		}
+	}
+
+	/**
+     * Clear a specific timeout
+     * @param {string} messageId Message ID
+     */
+	clearTimeout(messageId) {
+		if (this.timeouts.has(messageId)) {
+			clearTimeout(this.timeouts.get(messageId));
+			this.timeouts.delete(messageId);
 		}
 	}
 
 	/**
      * Schedule a giveaway to end
-     * @param {Object} giveaway - Giveaway object
+     * @param {Document} giveaway Giveaway document
      */
 	async scheduleGiveaway(giveaway) {
-		if (!giveaway || !giveaway.messageId) return;
+		if (!giveaway?.messageId) return;
 
-		if (this.timeouts.has(giveaway.messageId)) {
-			clearTimeout(this.timeouts.get(giveaway.messageId));
-			this.timeouts.delete(giveaway.messageId);
-		}
+		this.clearTimeout(giveaway.messageId);
 
 		const timeLeft = giveaway.endTime - Date.now();
-		const isEnded = typeof giveaway.ended === 'boolean' ? giveaway.ended :
-			typeof giveaway.ended === 'string' ? giveaway.ended === 'true' || giveaway.ended === '1' :
-				Boolean(giveaway.ended);
 
-		if (!isEnded && timeLeft > 0) {
-			const timeout = setTimeout(() => this.end(giveaway.messageId), timeLeft);
+		if (!giveaway.ended && timeLeft > 0) {
+			const timeout = setTimeout(
+				() => this.end(giveaway.messageId),
+				Math.min(timeLeft, 2147483647),
+			);
 			this.timeouts.set(giveaway.messageId, timeout);
 		}
-		else if (timeLeft <= 0 && !isEnded) {
+		else if (timeLeft <= 0 && !giveaway.ended) {
 			await this.end(giveaway.messageId);
 		}
 	}
 
-	selectWinners(participants, count) {
+	async selectWinners(participants, count, guildId) {
 		const winners = [];
 		participants = [...new Set(participants)];
 
 		while (winners.length < count && participants.length > 0) {
 			const index = Math.floor(Math.random() * participants.length);
-			winners.push(participants.splice(index, 1)[0]);
+			const selectedId = participants.splice(index, 1)[0];
+
+			try {
+				const guild = await this.client.guilds.fetch(guildId);
+				const member = await guild.members.fetch(selectedId);
+				if (member) {
+					winners.push(selectedId);
+				}
+			}
+			catch {
+				continue;
+			}
 		}
 
 		return winners;

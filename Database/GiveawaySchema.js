@@ -1,5 +1,6 @@
-module.exports = {
-	_id: String,
+const { Schema, model } = require('mongoose');
+
+const giveaway = new Schema ({
 	messageId: String,
 	channelId: String,
 	guildId: String,
@@ -10,4 +11,6 @@ module.exports = {
 	participants: Array,
 	ended: Boolean,
 	winners: Array,
-};
+});
+
+module.exports = model('giveaway', giveaway);

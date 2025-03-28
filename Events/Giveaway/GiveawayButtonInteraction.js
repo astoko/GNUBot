@@ -1,5 +1,6 @@
 const { Events } = require('discord.js');
 const GiveawayManager = require('../../src/utils/GiveawayManager');
+const GiveawaySchema = require('../../Database/GiveawaySchema');
 
 module.exports = {
 	name: Events.InteractionCreate,
@@ -15,40 +16,25 @@ module.exports = {
 		try {
 			await interaction.deferReply({ flags: ['Ephemeral'] });
 
-			const messageId = interaction.message.id;
-			const giveaway = await GiveawayManager.giveaways.findOne({ messageId: messageId });
+			const giveaway = await GiveawaySchema.findOneAndUpdate(
+				{
+					messageId: interaction.message.id,
+					ended: false,
+					participants: { $ne: interaction.user.id },
+				},
+				{ $addToSet: { participants: interaction.user.id } },
+				{ new: true },
+			);
 
 			if (!giveaway) {
 				return interaction.editReply({
-					content: '❌ Could not find this giveaway!',
+					content: '❌ Could not join the giveaway. It may have ended or you\'ve already joined.',
 					flags: ['Ephemeral'],
 				});
 			}
 
-			if (giveaway.ended === true || giveaway.ended === 'true' || giveaway.ended === '1') {
-				return interaction.editReply({
-					content: '❌ This giveaway has ended!',
-					flags: ['Ephemeral'],
-				});
-			}
-
-			const userId = interaction.user.id;
-			if (giveaway.participants.includes(userId)) {
-				return interaction.editReply({
-					content: '❌ You have already joined this giveaway!',
-					flags: ['Ephemeral'],
-				});
-			}
-
-			const newParticipants = [...giveaway.participants, userId];
-			await GiveawayManager.giveaways.updateOne(
-				{ messageId: interaction.message.id },
-				{ $set: { participants: newParticipants } },
-			);
-
-			const updatedGiveaway = await GiveawayManager.giveaways.findOne({ messageId: interaction.message.id });
 			await interaction.message.edit({
-				embeds: [GiveawayManager.createEmbed(updatedGiveaway)],
+				embeds: [GiveawayManager.createEmbed(giveaway)],
 				components: [GiveawayManager.createButtons()],
 			});
 

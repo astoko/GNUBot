@@ -17,10 +17,10 @@
   },
   "homepage": "https://github.com/astoko/GNUBot#readme",
   "dependencies": {
-    "better-sqlite3": "^11.9.1",
     "discord.js": "^14.18.0",
     "dotenv": "^16.4.7",
-    "glob": "^11.0.1"
+    "glob": "^11.0.1",
+    "mongoose": "^8.13.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.23.0",

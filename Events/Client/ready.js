@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 const { Client, Events } = require('discord.js');
 const loadCommands = require('../../src/utils/CommandLoader');
-const DatabaseManager = require('../../src/utils/DatabaseManager');
 const GiveawayManager = require('../../src/utils/GiveawayManager');
+const mongoose = require('mongoose');
 
 module.exports = {
 	name: Events.ClientReady,
@@ -14,7 +14,10 @@ module.exports = {
      * @returns {Promise<void>}
      */
 	async execute(client) {
-		await DatabaseManager.initialize();
+		await mongoose.connect(process.env.mongo).then(async () => {
+			console.log('✅ Mongoose Database Connected');
+		});
+
 		await GiveawayManager.initialize(client);
 		await loadCommands(client);
 
