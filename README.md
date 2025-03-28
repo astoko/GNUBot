@@ -60,7 +60,8 @@ npm install
 ```
 
 4. Config the bot:
-To be done.
+Configure the .env with the variables specified.
+If you need more help or more information, visit our wiki.
 
 ### Running the Bot
 

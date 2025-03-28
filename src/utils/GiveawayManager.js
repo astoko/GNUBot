@@ -17,6 +17,35 @@ class GiveawayManager {
 	}
 
 	/**
+     * Clear a specific timeout
+     * @param {string} messageId Message ID
+     */
+	clearTimeout(messageId) {
+		if (this.timeouts.has(messageId)) {
+			clearTimeout(this.timeouts.get(messageId));
+			this.timeouts.delete(messageId);
+		}
+	}
+
+	/**
+     * Check and schedule active giveaways
+     */
+	async checkGiveaways() {
+		const activeGiveaways = await GiveawaySchema.find({
+			ended: false,
+		});
+
+		for (const giveaway of activeGiveaways) {
+			if (giveaway.endTime <= Date.now()) {
+				await this.end(giveaway.messageId);
+			}
+			else {
+				await this.scheduleGiveaway(giveaway);
+			}
+		}
+	}
+
+	/**
      * Create a new giveaway
      * @param {Object} params Giveaway parameters
      * @returns {Promise<Document>} Created giveaway document
@@ -111,31 +140,6 @@ class GiveawayManager {
 	}
 
 	/**
-     * Check and schedule active giveaways
-     */
-	async checkGiveaways() {
-		const activeGiveaways = await GiveawaySchema.find({
-			ended: false,
-			endTime: { $gt: Date.now() },
-		});
-
-		for (const giveaway of activeGiveaways) {
-			await this.scheduleGiveaway(giveaway);
-		}
-	}
-
-	/**
-     * Clear a specific timeout
-     * @param {string} messageId Message ID
-     */
-	clearTimeout(messageId) {
-		if (this.timeouts.has(messageId)) {
-			clearTimeout(this.timeouts.get(messageId));
-			this.timeouts.delete(messageId);
-		}
-	}
-
-	/**
      * Schedule a giveaway to end
      * @param {Document} giveaway Giveaway document
      */
@@ -158,6 +162,13 @@ class GiveawayManager {
 		}
 	}
 
+	/**
+ 	 * Select winners for a giveaway
+ 	 * @param {string[]} participants - Array of participant user IDs
+ 	 * @param {number} count - Number of winners to select
+ 	 * @param {string} guildId - Discord guild/server ID
+ 	 * @returns {Promise<string[]>} Array of winner user IDs
+ 	*/
 	async selectWinners(participants, count, guildId) {
 		const winners = [];
 		participants = [...new Set(participants)];
@@ -181,6 +192,18 @@ class GiveawayManager {
 		return winners;
 	}
 
+	/**
+ 	 * Create giveaway embed
+ 	 * @param {Object} giveaway - Giveaway document from database
+ 	 * @param {string} giveaway.prize - The giveaway prize
+ 	 * @param {string} giveaway.hosterId - User ID of giveaway host
+ 	 * @param {number} giveaway.winnerCount - Number of winners
+ 	 * @param {number} giveaway.endTime - Timestamp when giveaway ends
+ 	 * @param {string[]} giveaway.participants - Array of participant user IDs
+ 	 * @param {string[]} [giveaway.winners] - Array of winner user IDs
+ 	 * @param {boolean} ended - Whether the giveaway has ended
+ 	 * @returns {EmbedBuilder} Discord embed for the giveaway
+ 	*/
 	createEmbed(giveaway, ended = false) {
 		const embed = new EmbedBuilder()
 			.setTitle('🎉 Giveaway')
@@ -203,6 +226,11 @@ class GiveawayManager {
 		return embed;
 	}
 
+	/**
+ 	 * Create giveaway buttons
+ 	 * @param {boolean} ended - Whether the giveaway has ended
+ 	 * @returns {ActionRowBuilder} Discord button row for the giveaway
+ 	*/
 	createButtons(ended = false) {
 		return new ActionRowBuilder()
 			.addComponents(
