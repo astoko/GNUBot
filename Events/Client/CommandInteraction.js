@@ -8,6 +8,7 @@ const {
 	time,
 } = require('discord.js');
 const GetPermissionNames = require('../../src/utils/GetPermissionNames');
+const ConfigSchema = require('../../Database/Config');
 
 module.exports = {
 	name: Events.InteractionCreate,
@@ -51,14 +52,29 @@ module.exports = {
 			}
 		}
 
-		if (command.permissions?.length) {
-			const missingPerms = command.permissions.filter(perm =>
+		const config = await ConfigSchema.findOne({ guildId: interaction.guild.id });
+		const commandConfig = config?.commands?.find(cmd => cmd.name === command.data.name);
+		const requiredPerms = commandConfig?.permissions || commandConfig?.defaultPermissions;
+		const requiredRoles = commandConfig?.roles || [];
+
+		if (requiredPerms.length) {
+			const missingPerms = requiredPerms.filter(perm =>
 				!interaction.member.permissions.has(PermissionFlagsBits[perm]),
 			);
 
 			if (missingPerms.length) {
-				const readablePerms = await GetPermissionNames(missingPerms || []);
+				const readablePerms = await GetPermissionNames(missingPerms);
 				return await sendError(`❌ You need the following permissions to use this command: \`${readablePerms.join(', ')}\``);
+			}
+		}
+
+		if (requiredRoles.length) {
+			const hasRole = await interaction.member.roles.cache.some(role =>
+				requiredRoles.includes(role.id),
+			);
+
+			if (!hasRole) {
+				return await sendError('❌ You do not have the required roles to use this command.');
 			}
 		}
 

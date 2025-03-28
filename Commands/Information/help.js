@@ -88,16 +88,15 @@ module.exports = {
 						const files = (await readdir(folderPath))
 							.filter(file => file.endsWith('.js'));
 
-						commandsByDirectory[folder] = files
-							.map(async (file) => {
-								const command = await interaction.client.commands.get(file.slice(0, -3));
+						const commands = await Promise.all(files.map(async (file) => {
+							const command = interaction.client.commands.get(file.slice(0, -3));
+							return command?.data && !command.disabled ? {
+								name: command.data.name,
+								description: command.data.description,
+							} : null;
+						}));
 
-								return command?.data && !command.deleted ? {
-									name: command.data.name,
-									description: command.data.description,
-								} : null;
-							})
-							.filter(Boolean);
+						commandsByDirectory[folder] = commands.filter(cmd => cmd !== null);
 					}),
 			);
 
@@ -130,7 +129,7 @@ module.exports = {
 
 			collector.on('collect', async i => {
 				const selectedDirectory = i.values[0];
-				const commands = commandsByDirectory[selectedDirectory];
+				const commands = commandsByDirectory[selectedDirectory] || [];
 				const embedsToSend = [];
 				let currentEmbed = new EmbedBuilder()
 					.setTitle(`${selectedDirectory} Commands`)
@@ -141,33 +140,37 @@ module.exports = {
 				let currentCharCount = currentEmbed.data.title.length + currentEmbed.data.description.length;
 				let pageCount = 1;
 
-				for (const cmd of commands) {
-					const fieldChars = cmd.name.length + cmd.description.length;
+				if (commands && commands.length > 0) {
+					for (const cmd of commands) {
+						if (!cmd || !cmd.name || !cmd.description) continue;
 
-					if (currentFields.length >= 25 || currentCharCount + fieldChars >= 6000) {
-						currentEmbed.addFields(currentFields);
-						embedsToSend.push(currentEmbed);
+						const fieldChars = cmd.name.length + cmd.description.length;
 
-						pageCount++;
-						currentEmbed = new EmbedBuilder()
-							.setTitle(`ℹ️ ${selectedDirectory} Commands (Page ${pageCount})`)
-							.setDescription('List of all commands in this Directory')
-							.setColor('Green')
-							.setTimestamp();
+						if (currentFields.length >= 25 || currentCharCount + fieldChars >= 6000) {
+							currentEmbed.addFields(currentFields);
+							embedsToSend.push(currentEmbed);
 
-						currentFields = [];
-						currentCharCount = currentEmbed.data.title.length + currentEmbed.data.description.length;
+							pageCount++;
+							currentEmbed = new EmbedBuilder()
+								.setTitle(`ℹ️ ${selectedDirectory} Commands (Page ${pageCount})`)
+								.setDescription('List of all commands in this Directory')
+								.setColor('Green')
+								.setTimestamp();
+
+							currentFields = [];
+							currentCharCount = currentEmbed.data.title.length + currentEmbed.data.description.length;
+						}
+
+						const truncatedDescription = cmd.description.length > 1024
+							? cmd.description.substring(0, 1021) + '...'
+							: cmd.description;
+
+						currentFields.push({
+							name: cmd.name,
+							value: truncatedDescription,
+						});
+						currentCharCount += fieldChars;
 					}
-
-					const truncatedDescription = cmd.description.length > 1024
-						? cmd.description.substring(0, 1021) + '...'
-						: cmd.description;
-
-					currentFields.push({
-						name: cmd.name,
-						value: truncatedDescription,
-					});
-					currentCharCount += fieldChars;
 				}
 
 				if (currentFields.length > 0) {

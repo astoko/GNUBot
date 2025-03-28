@@ -1,5 +1,6 @@
 const FileLoader = require('./FileLoader');
 const { Events } = require('discord.js');
+const ConfigSchema = require('../../Database/Config');
 
 /**
  * @typedef {Object} EventStatus
@@ -14,8 +15,7 @@ const getEventName = (file) => file.split('/').pop().slice(0, -3);
 const isValidEvent = (event) => {
 	return event &&
            event.name &&
-           (Object.values(Events).includes(event.name)) &&
-           (!event.disabled || event.disabled !== true);
+           (Object.values(Events).includes(event.name));
 };
 
 async function loadEvents(client) {
@@ -26,6 +26,14 @@ async function loadEvents(client) {
 		const events = [];
 		const files = await FileLoader.loadFiles('Events');
 
+		const eventData = files.map(file => {
+			const event = require(file);
+			return {
+				name: event?.name,
+				disabled: event?.disabled || false,
+			};
+		}).filter(evt => evt.name);
+
 		await Promise.all(files.map(async (file) => {
 			try {
 				const event = require(file);
@@ -33,16 +41,45 @@ async function loadEvents(client) {
 
 				if (!isValidEvent(event)) {
 					events.push(createEventStatus(eventName, false));
+					return;
 				}
-				else {
-					const execute = async (...args) => await event.execute(...args, client);
-					const target = event.rest ? client.rest : client;
 
-					await target[event.once ? 'once' : 'on'](event.name, execute);
-					await client.events.set(event.name, execute);
+				const execute = async (...args) => {
+					const guildId = args[0]?.guildId || args[0]?.guild?.id;
 
-					events.push(createEventStatus(eventName, true));
-				}
+					if (guildId) {
+						let guildConfig = await ConfigSchema.findOne({ guildId });
+
+						if (!guildConfig) {
+							guildConfig = await ConfigSchema.create({
+								guildId,
+								commands: [],
+								events: eventData,
+							});
+						}
+						else {
+							const existingEvent = guildConfig.events.find(e => e.name === event.name);
+							if (!existingEvent) {
+								guildConfig.events.push({
+									name: event.name,
+									disabled: event.disabled || false,
+								});
+								await guildConfig.save();
+							}
+						}
+
+						const eventConfig = guildConfig.events?.find(e => e.name === event.name);
+						if (eventConfig?.disabled) return;
+					}
+
+					await event.execute(...args, client);
+				};
+
+				const target = event.rest ? client.rest : client;
+				await target[event.once ? 'once' : 'on'](event.name, execute);
+				await client.events.set(event.name, execute);
+				events.push(createEventStatus(eventName, true));
+
 			}
 			catch (error) {
 				console.error(`Failed to load event ${file}:`, error);
