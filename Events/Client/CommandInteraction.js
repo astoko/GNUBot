@@ -23,20 +23,42 @@ module.exports = {
 		if (!interaction.isChatInputCommand()) return;
 
 		const sendError = async (description) => {
-			return interaction.isRepliable()
-				? await interaction.reply({ content: description, flags: ['Ephemeral'] })
-				: await interaction.followUp({ content: description, flags: ['Ephemeral'] });
+			try {
+				if (interaction.replied) {
+					return await interaction.followUp({
+						content: description,
+						flags: ['Ephemeral'],
+					});
+				}
+
+				if (interaction.deferred) {
+					return await interaction.editReply({
+						content: description,
+						flags: ['Ephemeral'],
+					});
+				}
+
+				return await interaction.reply({
+					content: description,
+					flags: ['Ephemeral'],
+				});
+			}
+			catch (error) {
+				console.error('Error sending error response:', error);
+			}
 		};
 
-		if (interaction.channel.type === ChannelType.DM) {
-			return await sendError('❌ This bot does not support DM commands.');
-		}
-
 		const command = await client.commands.get(interaction.commandName);
+		const config = await ConfigSchema.findOne({ guildId: interaction.guild.id });
+		const commandConfig = config?.commands?.find(cmd => cmd.name === command.data.name);
 
 		if (!command) {
 			await client.commands.delete(interaction.commandName);
 			return await sendError(`❌ Command \`${interaction.commandName}\` is invalid.`);
+		}
+
+		if (commandConfig.disabled === true) {
+			return await sendError(`❌ Command \`${interaction.commandName}\` is disabled.`);
 		}
 
 		const cooldownKey = `${interaction.user.id}-${command.data.name}`;
@@ -52,12 +74,10 @@ module.exports = {
 			}
 		}
 
-		const config = await ConfigSchema.findOne({ guildId: interaction.guild.id });
-		const commandConfig = config?.commands?.find(cmd => cmd.name === command.data.name);
 		const requiredPerms = commandConfig?.permissions || commandConfig?.defaultPermissions;
 		const requiredRoles = commandConfig?.roles || [];
 
-		if (requiredPerms.length) {
+		if (requiredPerms?.length) {
 			const missingPerms = requiredPerms.filter(perm =>
 				!interaction.member.permissions.has(PermissionFlagsBits[perm]),
 			);
@@ -68,7 +88,7 @@ module.exports = {
 			}
 		}
 
-		if (requiredRoles.length) {
+		if (requiredRoles?.length) {
 			const hasRole = await interaction.member.roles.cache.some(role =>
 				requiredRoles.includes(role.id),
 			);
@@ -79,12 +99,12 @@ module.exports = {
 		}
 
 		try {
-			await client.commandCooldown.set(cooldownKey, Date.now() + 1000);
+			await client.commandCooldown.set(cooldownKey, Date.now());
 			await command.execute(interaction, client);
 		}
 		catch (error) {
 			console.error(`Error executing command ${interaction.commandName}:`, error);
-			await await sendError('❌ An error occured while executing this command. Developers have been notified.');
+			return await sendError('❌ An error occurred while executing this command.');
 		}
 	},
 };

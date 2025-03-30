@@ -94,7 +94,7 @@ When it is stable.. that is far away from now..
  </picture>
 </h4>
 
-Got stuck and can't figure out what is the problem? Here is an [handy dandy guide](https://github.com/astoko/GNUBot/wiki) for all your needs!  
+Got stuck and can't figure out what is the problem? Here is a [handy dandy guide](https://github.com/astoko/GNUBot/wiki) for all your needs!  
 
 <h4>
  <picture>
