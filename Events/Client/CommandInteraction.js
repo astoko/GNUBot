@@ -57,6 +57,10 @@ module.exports = {
 			return await sendError(`❌ Command \`${interaction.commandName}\` is invalid.`);
 		}
 
+		if (command.disabled === true) {
+			return await sendError(`❌ Command \`${interaction.commandName}\` is disabled.`);
+		}
+
 		if (commandConfig.disabled === true) {
 			return await sendError(`❌ Command \`${interaction.commandName}\` is disabled.`);
 		}

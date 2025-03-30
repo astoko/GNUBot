@@ -22,7 +22,7 @@ module.exports = {
 					{ name: 'Events', value: 'events' },
 				),
 		),
-	disabled: false,
+	disabled: true,
 	permissions: [PermissionFlagsBits.Administrator],
 
 	/**
