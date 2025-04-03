@@ -1,6 +1,6 @@
 const { Events } = require('discord.js');
 const GiveawayManager = require('../../src/utils/GiveawayManager');
-const GiveawaySchema = require('../../Database/GiveawaySchema');
+const GiveawaySchema = require('../../database/GiveawaySchema');
 
 module.exports = {
 	name: Events.MessageDelete,

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const { SlashCommandBuilder, PermissionFlagsBits, ChatInputCommandInteraction } = require('discord.js');
 const GiveawayManager = require('../../src/utils/GiveawayManager');
-const GiveawaySchema = require('../../Database/GiveawaySchema');
+const GiveawaySchema = require('../../database/GiveawaySchema');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -109,7 +109,7 @@ module.exports = {
 
 			if (!giveaway) {
 				return await interaction.editReply({
-					content: '❌ Could not find an active giveaway with that message ID!',
+					content: '❌ Could not find an active giveaway with that message ID.',
 				});
 			}
 
@@ -117,7 +117,7 @@ module.exports = {
 
 			if (endedGiveaway) {
 				return await interaction.editReply({
-					content: '✅ Giveaway ended successfully!',
+					content: '✅ Giveaway ended successfully.',
 				});
 			}
 

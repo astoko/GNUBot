@@ -5,8 +5,6 @@ const {
 	PermissionFlagsBits,
 	ChatInputCommandInteraction,
 } = require('discord.js');
-const CommandLoader = require('../../src/utils/CommandLoader');
-const EventLoader = require('../../src/utils/EventLoader');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -30,60 +28,5 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction - Command Interaction
      */
 	async execute(interaction, client) {
-		let replyPromise;
-		try {
-			if (!interaction.replied && !interaction.deferred) {
-				replyPromise = interaction.deferReply();
-			}
-
-			const type = interaction.options.getString('type');
-			const guildId = interaction.guildId;
-			const embed = new EmbedBuilder()
-				.setColor('Blue')
-				.setTimestamp();
-
-			if (replyPromise) await replyPromise;
-
-			if (type === 'commands') {
-				embed.setDescription('🔄 Commands sent to processing queue.');
-				await interaction.editReply({ embeds: [embed] });
-
-				const success = await CommandLoader.loadGuild(client, guildId);
-				embed
-					.setColor(success ? 'Green' : 'Red')
-					.setDescription(success ?
-						'✅ Successfully reloaded guild commands.' :
-						'❌ Failed to reload guild commands.',
-					);
-			}
-			else if (type === 'events') {
-				embed.setDescription('🔄 Events sent to processing queue.');
-				await interaction.editReply({ embeds: [embed] });
-
-				const guildEvents = Array.from(client.events.entries())
-					.filter(([_, event]) => event.guildId === guildId);
-
-				for (const [key, value] of guildEvents) {
-					client.removeListener(key, value);
-				}
-
-				const success = await EventLoader.loadGuild(client, guildId);
-				embed
-					.setColor(success ? 'Green' : 'Red')
-					.setDescription(success ?
-						'✅ Successfully reloaded guild events.' :
-						'❌ Failed to reload guild events.',
-					);
-			}
-
-			return await interaction.editReply({ embeds: [embed] });
-		}
-		catch (error) {
-			console.error('Error in reload command:', error);
-			return await interaction.editReply({
-				content: '❌ An error occurred while reloading.',
-				flags: ['Ephemeral'],
-			});
-		}
 	},
 };

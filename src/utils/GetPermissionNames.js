@@ -4,6 +4,7 @@ const { PermissionFlagsBits } = require('discord.js');
  * Converts permission flag bits to readable permission names
  * @param {bigint | bigint[] | string | string[]} permissions - Single or Array of permission flag bits or names
  * @returns {string[]} - Array of readable permission names
+ * @example GetPermissionNames(permissions || permission)
  */
 async function GetPermissionNames(permissions) {
 	if (!permissions) return ['None'];

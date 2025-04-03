@@ -3,12 +3,11 @@ const {
 	Events,
 	ChatInputCommandInteraction,
 	Client,
-	ChannelType,
 	PermissionFlagsBits,
 	time,
 } = require('discord.js');
 const GetPermissionNames = require('../../src/utils/GetPermissionNames');
-const ConfigSchema = require('../../Database/Config');
+const CacheManager = require('../../src/utils/CacheManager');
 
 module.exports = {
 	name: Events.InteractionCreate,
@@ -49,19 +48,20 @@ module.exports = {
 		};
 
 		const command = await client.commands.get(interaction.commandName);
-		const config = await ConfigSchema.findOne({ guildId: interaction.guild.id });
-		const commandConfig = config?.commands?.find(cmd => cmd.name === command.data.name);
 
 		if (!command) {
 			await client.commands.delete(interaction.commandName);
 			return await sendError(`❌ Command \`${interaction.commandName}\` is invalid.`);
 		}
 
-		if (command.disabled === true) {
-			return await sendError(`❌ Command \`${interaction.commandName}\` is disabled.`);
+		const config = await CacheManager.getConfig(interaction.guild.id);
+		if (!config) {
+			return await sendError('❌ Guild configuration not found.');
 		}
 
-		if (commandConfig.disabled === true) {
+		const commandConfig = config.commands?.find(cmd => cmd.name === command.data.name);
+
+		if (command.disabled === true || commandConfig?.disabled === true) {
 			return await sendError(`❌ Command \`${interaction.commandName}\` is disabled.`);
 		}
 

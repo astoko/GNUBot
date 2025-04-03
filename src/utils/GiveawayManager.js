@@ -1,5 +1,5 @@
 const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
-const GiveawaySchema = require('../../Database/GiveawaySchema');
+const GiveawaySchema = require('../../database/GiveawaySchema');
 
 class GiveawayManager {
 	constructor() {
@@ -10,6 +10,7 @@ class GiveawayManager {
 	/**
      * Initialize the giveaway manager with client reference
      * @param {Client} client - Discord client instance
+	 * @example initialize(client)
      */
 	async initialize(client) {
 		this.client = client;
@@ -19,6 +20,7 @@ class GiveawayManager {
 	/**
      * Clear a specific timeout
      * @param {string} messageId Message ID
+	 * @example clearTimeout(messageId)
      */
 	clearTimeout(messageId) {
 		if (this.timeouts.has(messageId)) {
@@ -29,6 +31,7 @@ class GiveawayManager {
 
 	/**
      * Check and schedule active giveaways
+	 * @example checkGiveaways()
      */
 	async checkGiveaways() {
 		const activeGiveaways = await GiveawaySchema.find({
@@ -49,6 +52,7 @@ class GiveawayManager {
      * Create a new giveaway
      * @param {Object} params Giveaway parameters
      * @returns {Promise<Document>} Created giveaway document
+	 * @example create(params)
      */
 	async create(params) {
 		const giveaway = new GiveawaySchema({
@@ -69,6 +73,7 @@ class GiveawayManager {
 	/**
      * End a giveaway
      * @param {string} messageId Giveaway message ID
+	 * @example end(messageId)
      */
 	async end(messageId) {
 		const giveaway = await GiveawaySchema.findOne({
@@ -117,6 +122,7 @@ class GiveawayManager {
 	/**
      * Handle giveaway message deletion
      * @param {string} messageId Giveaway message ID
+	 * @example end_,messageDeleted(messageId)
      */
 	async end_messageDeleted(messageId) {
 		const giveaway = await GiveawaySchema.findOneAndDelete({ messageId });
@@ -142,6 +148,7 @@ class GiveawayManager {
 	/**
      * Schedule a giveaway to end
      * @param {Document} giveaway Giveaway document
+	 * @example scheduleGiveaway(giveaway)
      */
 	async scheduleGiveaway(giveaway) {
 		if (!giveaway?.messageId) return;
@@ -168,6 +175,7 @@ class GiveawayManager {
  	 * @param {number} count - Number of winners to select
  	 * @param {string} guildId - Discord guild/server ID
  	 * @returns {Promise<string[]>} Array of winner user IDs
+	 * @example selectWinners(participants, count, guildId)
  	*/
 	async selectWinners(participants, count, guildId) {
 		const winners = [];
@@ -203,6 +211,7 @@ class GiveawayManager {
  	 * @param {string[]} [giveaway.winners] - Array of winner user IDs
  	 * @param {boolean} ended - Whether the giveaway has ended
  	 * @returns {EmbedBuilder} Discord embed for the giveaway
+	 * @example createEmbed(giveaway, ended)
  	*/
 	createEmbed(giveaway, ended = false) {
 		const embed = new EmbedBuilder()
@@ -230,6 +239,7 @@ class GiveawayManager {
  	 * Create giveaway buttons
  	 * @param {boolean} ended - Whether the giveaway has ended
  	 * @returns {ActionRowBuilder} Discord button row for the giveaway
+	 * @example createButtons(ended)
  	*/
 	createButtons(ended = false) {
 		return new ActionRowBuilder()

@@ -1,6 +1,6 @@
 # GNUBot | An Open-Source Discord Bot
 
-![GNUBot Header](img/readme/Header.png)
+![GNUBot Header](assets/readme/Header.png)
 
 GNUBot is an open-source bot built using JavaScript. It is designed to be free as in freedom and price, offering a user-friendly deployment experience in local environments. GNUBot adheres to the following principles:
 
@@ -14,9 +14,9 @@ GNUBot is an open-source bot built using JavaScript. It is designed to be free a
 
 <h4>
  <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Features.png">
-  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Features.png">
-  <img alt="Features" src="img/readme/dark/Features.png">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/dark/Features.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/light/Features.png">
+  <img alt="Features" src="assets/readme/dark/Features.png">
  </picture>
 </h4>
 
@@ -26,9 +26,9 @@ GNUBot is an open-source bot built using JavaScript. It is designed to be free a
 
 <h4>
  <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Getting-Started.png">
-  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Getting-Started.png">
-  <img alt="Getting Started" src="img/readme/dark/Getting-Started.png">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/dark/Getting-Started.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/light/Getting-Started.png">
+  <img alt="Getting Started" src="assets/readme/dark/Getting-Started.png">
  </picture>
 </h4>
 
@@ -71,9 +71,9 @@ npm start
 ```
 <h4>
  <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Frequently-Asked-Questions.png">
-  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Frequently-Asked-Questions.png">
-  <img alt="FAQ" src="img/readme/dark/Frequently-Asked-Questions.png">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/dark/Frequently-Asked-Questions.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/light/Frequently-Asked-Questions.png">
+  <img alt="FAQ" src="assets/readme/dark/Frequently-Asked-Questions.png">
  </picture>
 </h4>
 
@@ -88,9 +88,9 @@ When it is stable.. that is far away from now..
 
 <h4>
  <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Got-Stuck.png">
-  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Got-Stuck.png">
-  <img alt="License" src="img/readme/dark/Got-Stuck.png">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/dark/Got-Stuck.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/light/Got-Stuck.png">
+  <img alt="License" src="assets/readme/dark/Got-Stuck.png">
  </picture>
 </h4>
 
@@ -98,9 +98,9 @@ Got stuck and can't figure out what is the problem? Here is a [handy dandy guide
 
 <h4>
  <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/License.png">
-  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/License.png">
-  <img alt="License" src="img/readme/dark/License.png">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/dark/License.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/light/License.png">
+  <img alt="License" src="assets/readme/dark/License.png">
  </picture>
 </h4>
 
@@ -108,9 +108,9 @@ This project is licensed under the [GNU GPLv3 License](LICENSE).
 
 <h4>
  <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="img/readme/dark/Join-us-at-our-Discord-Server!.png">
-  <source media="(prefers-color-scheme: light)" srcset="img/readme/light/Join-us-at-our-Discord-Server!.png">
-  <img alt="Join Us" src="img/readme/dark/Join-us-at-our-Discord-Server!.png">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/dark/Join-us-at-our-Discord-Server!.png">
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/light/Join-us-at-our-Discord-Server!.png">
+  <img alt="Join Us" src="assets/readme/dark/Join-us-at-our-Discord-Server!.png">
  </picture>
 </h4>
 
@@ -119,7 +119,7 @@ For any questions or suggestions, feel free to open an issue or reach out via Gi
 #
 
 
-![GNUBot Roadmap](img/readme/Roadmap.png)
+![GNUBot Roadmap](assets/readme/Roadmap.png)
 
 Enjoy using GNUBot! Made with ♥️ by GNUBot Team.
 

@@ -13,6 +13,6 @@ module.exports = {
      */
 	async execute(client) {
 		await GiveawayManager.initialize(client);
-		console.log(`✅ ${client.user.tag} is ready to serve!`);
+		console.log(`✅ ${client.user.tag} is ready to serve.`);
 	},
 };

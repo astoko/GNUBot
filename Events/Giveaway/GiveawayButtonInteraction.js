@@ -1,6 +1,6 @@
 const { Events } = require('discord.js');
 const GiveawayManager = require('../../src/utils/GiveawayManager');
-const GiveawaySchema = require('../../Database/GiveawaySchema');
+const GiveawaySchema = require('../../database/GiveawaySchema');
 
 module.exports = {
 	name: Events.InteractionCreate,
@@ -39,7 +39,7 @@ module.exports = {
 			});
 
 			return interaction.editReply({
-				content: '✅ You have joined the giveaway!',
+				content: '✅ You have joined the giveaway.',
 				flags: ['Ephemeral'],
 			});
 		}

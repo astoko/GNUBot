@@ -4,8 +4,6 @@ const {
 	SlashCommandBuilder,
 	ChatInputCommandInteraction,
 } = require('discord.js');
-const loadCommands = require('../../src/utils/CommandLoader');
-const loadEvents = require('../../src/utils/EventLoader');
 
 module.exports = {
 	data: new SlashCommandBuilder()
