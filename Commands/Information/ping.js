@@ -1,14 +1,9 @@
 /* eslint-disable no-unused-vars */
-const {
-	EmbedBuilder,
-	SlashCommandBuilder,
-	ChatInputCommandInteraction,
-} = require('discord.js');
+const { EmbedBuilder, ChatInputCommandInteraction } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('ping')
-		.setDescription('Gets latency and API latency of the bot'),
+	name: 'ping',
+	description: 'Get the latency of the bot',
 	disabled: false,
 	permissions: [],
 

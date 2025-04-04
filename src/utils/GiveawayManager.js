@@ -13,6 +13,7 @@ class GiveawayManager {
 	 * @example initialize(client)
      */
 	async initialize(client) {
+		console.log('Giveaway Manager initialized');
 		this.client = client;
 		await this.checkGiveaways();
 	}

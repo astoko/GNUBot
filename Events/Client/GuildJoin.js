@@ -19,7 +19,7 @@ module.exports = {
 				await Config.create({
 					guildId: guild.id,
 					commands: [...client.commands.values()].map(cmd => ({
-						name: cmd.data.name,
+						name: cmd.name,
 						disabled: cmd.disabled || false,
 						permissions: cmd.permissions || [],
 						roles: cmd.roles || [],

@@ -1,28 +1,29 @@
 /* eslint-disable no-unused-vars */
-const { SlashCommandBuilder,
+const {
 	EmbedBuilder,
 	ActionRowBuilder,
 	StringSelectMenuBuilder,
 	ComponentType,
 	ChatInputCommandInteraction,
 	AutocompleteInteraction,
-	PermissionFlagsBits,
+	ApplicationCommandOptionType,
 } = require('discord.js');
 const { readdir } = require('fs/promises');
 const { join } = require('path');
 const GetPermissionNames = require('../../src/utils/GetPermissionNames');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('help')
-		.setDescription('Displays a list of bot commands')
-		.addStringOption(option =>
-			option
-				.setName('command_name')
-				.setDescription('Details about a specific command')
-				.setAutocomplete(true)
-				.setRequired(false),
-		),
+	name: 'help',
+	description: 'Displays a list of bot commands',
+	options: [
+		{
+			name: 'command_name',
+			description: 'Details about a specific command',
+			type: ApplicationCommandOptionType.String,
+			autocomplete: true,
+			required: false,
+		},
+	],
 	disabled: false,
 	permissions: [],
 
@@ -34,11 +35,11 @@ module.exports = {
 		const focusedValue = interaction.options.getFocused().toLowerCase();
 		const commands = Array.from(interaction.client.commands.values());
 		const filtered = commands
-			.filter(cmd => cmd.data.name.toLowerCase().startsWith(focusedValue))
+			.filter(cmd => cmd.name.toLowerCase().startsWith(focusedValue))
 			.slice(0, 25)
 			.map(cmd => ({
-				name: cmd.data.name,
-				value: cmd.data.name,
+				name: cmd.name,
+				value: cmd.name,
 			}));
 
 		await interaction.respond(filtered);
@@ -65,8 +66,8 @@ module.exports = {
 
 			const permissionNames = await GetPermissionNames(command.permissions || []);
 			const commandEmbed = new EmbedBuilder()
-				.setTitle(`ℹ️ Command: ${command.data.name}`)
-				.setDescription(command.data.description)
+				.setTitle(`ℹ️ Command: ${command.name}`)
+				.setDescription(command.description)
 				.setColor('Green')
 				.addFields(
 					{ name: 'Status', value: command.disabled ? '❌ Disabled' : '✅ Enabled', inline: true },
@@ -90,9 +91,9 @@ module.exports = {
 
 						const commands = await Promise.all(files.map(async (file) => {
 							const command = interaction.client.commands.get(file.slice(0, -3));
-							return command?.data && !command.disabled ? {
-								name: command.data.name,
-								description: command.data.description,
+							return command && !command.disabled ? {
+								name: command.name,
+								description: command.description,
 							} : null;
 						}));
 
@@ -137,7 +138,7 @@ module.exports = {
 					.setColor('Green');
 
 				let currentFields = [];
-				let currentCharCount = currentEmbed.data.title.length + currentEmbed.data.description.length;
+				let currentCharCount = currentEmbed.title.length + currentEmbed.description.length;
 				let pageCount = 1;
 
 				if (commands && commands.length > 0) {

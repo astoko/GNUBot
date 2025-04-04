@@ -1,7 +1,4 @@
-/* eslint-disable no-empty-function */
-/* eslint-disable no-unused-vars */
 const { createCanvas, loadImage, GlobalFonts } = require('@napi-rs/canvas');
-const { presenceImgStatus, badgesImg, botBadgesImg, otherImages } = require('../../config/image-files.json');
 
 class LevelUpImage {
 	constructor() {

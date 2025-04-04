@@ -1,4 +1,3 @@
-/* eslint-disable no-unsafe-negation */
 /* eslint-disable no-unused-vars */
 const { Client, Events, SlashCommandBuilder } = require('discord.js');
 const { glob } = require('glob');
@@ -12,7 +11,7 @@ class LoadManager {
      * @private
      * @param {string} file - File path to delete from the cache
      */
-	static #deleteCachedFile(file) {
+	static deleteCachedFile(file) {
 		const filePath = path.resolve(file);
 		if (require.cache[filePath]) delete require.cache[filePath];
 	}
@@ -23,13 +22,13 @@ class LoadManager {
      * @param {string} dirName - Directory to scan for files
      * @returns {Promise<string[]>} - Returns array of file paths
      */
-	static async #loadFiles(dirName) {
+	static async loadFiles(dirName) {
 		try {
 			const globPattern = path.join(process.cwd(), dirName, '**/*.js').replace(/\\/g, '/');
 			const files = await glob(globPattern);
 			const jsFiles = files.filter(file => path.extname(file) === '.js');
 			await Promise.all(jsFiles.map(file => {
-				this.#deleteCachedFile(file);
+				this.deleteCachedFile(file);
 				return Promise.resolve();
 			}));
 			return jsFiles;
@@ -76,15 +75,20 @@ class LoadManager {
 					update: {
 						$addToSet: {
 							events: {
-								$each: [...events.entries()].map(([evtName, evt]) => ({
-									name: evtName,
-									disabled: evt.disabled || false,
-								})),
+								$each: [...events.entries()]
+									.filter(([evtName]) => !config.events.find(e => e.name === evtName))
+									.map(([evtName, evt]) => ({
+										name: evtName,
+										disabled: evt.disabled || false,
+									})),
 							},
 						},
 					},
 				},
-			}));
+			})).filter(op => {
+				const eventsList = op.updateOne.update.$addToSet.events.$each;
+				return eventsList.length > 0;
+			});
 
 			if (bulkOps.length > 0) {
 				await Config.bulkWrite(bulkOps);
@@ -162,17 +166,39 @@ class LoadManager {
 		const commands = new Map();
 		const commandStatus = [];
 
-		for (const file of files) {
+		const loadedCommands = await Promise.all(files.map(async file => {
 			try {
 				const command = require(file);
-				if (command?.data instanceof SlashCommandBuilder && !command.disabled) {
-					commands.set(command.data.name, command);
+				const commandName = command?.name || path.basename(file, '.js');
+
+				if (command?.name && !command.disabled) {
+					commandStatus.push({
+						Command: commandName,
+						Status: '✅',
+					});
+					return { name: commandName, command };
 				}
+
+				commandStatus.push({
+					Command: commandName,
+					Status: '❌',
+					Permissions: 'N/A',
+				});
+				return null;
 			}
 			catch (error) {
-				console.error(`Failed to pre-load command ${file}:`, error);
+				console.error(`Failed to load command ${file}:`, error);
+				commandStatus.push({
+					Command: path.basename(file, '.js'),
+					Status: '❌',
+					Error: error.message,
+				});
+				return null;
 			}
-		}
+		}));
+
+		loadedCommands.filter(cmd => cmd !== null)
+			.forEach(({ name, command }) => commands.set(name, command));
 
 		if (configs.length > 0) {
 			const bulkOps = configs.map(config => ({
@@ -182,9 +208,9 @@ class LoadManager {
 						$addToSet: {
 							commands: {
 								$each: [...commands.values()]
-									.filter(cmd => !config.commands.find(c => c.name === cmd.data.name))
+									.filter(cmd => !config.commands.find(c => c.name === cmd.name))
 									.map(cmd => ({
-										name: cmd.data.name,
+										name: cmd.name,
 										disabled: cmd.disabled || false,
 										permissions: cmd.permissions || [],
 										roles: cmd.roles || [],
@@ -202,36 +228,17 @@ class LoadManager {
 			}
 		}
 
-		await Promise.all([...commands.values()].map(cmd =>
-			client.application?.commands.create(cmd.data.toJSON()),
-		));
+		await client.application?.commands.set([...commands.values()].map(cmd => ({
+			name: cmd.name,
+			description: cmd.description,
+			options: cmd.options || [],
+			defaultPermission: cmd.defaultPermission !== false,
+		})));
 
 		client.commands = commands;
 
-		for (const file of files) {
-			try {
-				const command = require(file);
-				const commandName = command?.data?.name || file.split('/').pop().slice(0, -3);
-
-				if (!command?.data instanceof SlashCommandBuilder || command.disabled) {
-					commandStatus.push({ Command: commandName, Status: '❌', Permissions: 'N/A' });
-					continue;
-				}
-
-				commands.set(command.data.name, command);
-				commandStatus.push({
-					Command: commandName,
-					Status: '✅',
-				});
-			}
-			catch (error) {
-				console.error(`Failed to load command ${file}:`, error);
-				commandStatus.push({ Command: file.split('/').pop().slice(0, -3), Status: '❌', Error: error.message });
-			}
-		}
-
 		console.info('\n=== Commands Loading Summary ===');
-		console.table(commandStatus, ['Command', 'Status']);
+		console.table(commandStatus, ['Command', 'Status', 'Error']);
 		console.timeEnd('Commands Loaded');
 		return { size: commands.size, status: commandStatus };
 	}
@@ -241,59 +248,18 @@ class LoadManager {
      * @param {Client} client - Discord client
      */
 	static async initialize(client) {
+		console.log('Load Manager initialized');
 		console.time('Total Load Time');
 		try {
 			console.info('=== Starting Bot Initialization ===');
 			client.events = new Map();
 			await client.commands.clear();
 
-			const [eventFiles, commandFiles] = await Promise.all([
-				this.#loadFiles('events'),
-				this.#loadFiles('commands'),
-			]);
-
 			const guilds = await client.guilds.fetch();
 			const configs = await Config.find();
-			const configUpdates = [];
 
 			for (const config of configs) {
 				await CacheManager.refreshConfig(config.guildId);
-				const eventsToUpdate = config.events.filter(evt => {
-					const file = eventFiles.find(f => f.includes(evt.name));
-					if (!file) return false;
-					const event = require(file);
-					return evt.disabled !== event.disabled;
-				});
-
-				const commandsToUpdate = config.commands.filter(cmd => {
-					const file = commandFiles.find(f => f.includes(cmd.name));
-					if (!file) return false;
-					const command = require(file);
-					return cmd.disabled !== command.disabled;
-				});
-
-				if (eventsToUpdate.length > 0 || commandsToUpdate.length > 0) {
-					configUpdates.push({
-						updateOne: {
-							filter: { guildId: config.guildId },
-							update: {
-								$set: {
-									'events.$[evt].disabled': true,
-									'commands.$[cmd].disabled': true,
-								},
-							},
-							arrayFilters: [
-								{ 'evt.name': { $in: eventsToUpdate.map(e => e.name) } },
-								{ 'cmd.name': { $in: commandsToUpdate.map(c => c.name) } },
-							],
-						},
-					});
-				}
-			}
-
-			if (configUpdates.length > 0) {
-				await Config.bulkWrite(configUpdates);
-				console.info(`Updated disabled states for ${configUpdates.length} guild configs`);
 			}
 
 			const missingGuilds = [...guilds.values()]
@@ -307,18 +273,10 @@ class LoadManager {
 			if (missingGuilds.length > 0) {
 				await Config.insertMany(missingGuilds);
 				configs.push(...missingGuilds);
-				console.info(`Created configs for ${missingGuilds.length} new guilds`);
 			}
-
-			const [eventResults, commandResults] = await Promise.all([
-				this.loadEvents(client, configs, eventFiles),
-				this.loadCommands(client, configs, commandFiles),
-			]);
 
 			console.info('\n=== Final Loading Summary ===');
 			console.table({
-				Events: { Total: eventFiles.length, Loaded: eventResults.size, Success: eventResults.status.filter(e => e.Status === '✅').length },
-				Commands: { Total: commandFiles.length, Loaded: commandResults.size, Success: commandResults.status.filter(c => c.Status === '✅').length },
 				Guilds: { Total: guilds.size, Configured: configs.length },
 			});
 		}

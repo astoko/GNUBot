@@ -1,6 +1,7 @@
 const { Client, Collection, Partials } = require('discord.js');
 const mongoose = require('mongoose');
 const LoadManager = require('./utils/LoadManager');
+const Config = require('../database/Config');
 
 const client = new Client({
 	intents: 3276799,
@@ -25,18 +26,22 @@ require('dotenv').config();
 client.commands = new Collection();
 client.events = new Collection();
 client.commandCooldown = new Collection();
-
-mongoose.connect(process.env.mongo)
-	.then(async () => {
+client.on('debug', (info) => {
+	console.log(info);
+});
+(async () => {
+	try {
+		await mongoose.connect(process.env.mongo);
 		console.log('✅ MongoDB Connected');
-		return await LoadManager.initialize(client);
-	})
-	.then(() => {
-		console.log(`✅ ${client.user.tag} is now online.`);
-	})
-	.catch(error => {
+
+		const eventFiles = await LoadManager.loadFiles('events');
+		const configs = await Config.find();
+		await LoadManager.loadEvents(client, configs, eventFiles);
+
+		await client.login(process.env.token);
+	}
+	catch (error) {
 		console.error('Startup error:', error);
 		process.exit(1);
-	});
-
-client.login(process.env.token);
+	}
+})();

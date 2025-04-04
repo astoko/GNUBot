@@ -1,37 +1,52 @@
 /* eslint-disable no-unused-vars */
-const { SlashCommandBuilder, PermissionFlagsBits, ChatInputCommandInteraction } = require('discord.js');
+const { PermissionFlagsBits, ChatInputCommandInteraction, ApplicationCommandOptionType } = require('discord.js');
 const GiveawayManager = require('../../src/utils/GiveawayManager');
 const GiveawaySchema = require('../../database/GiveawaySchema');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('giveaway')
-		.setDescription('Manage giveaways')
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('start')
-				.setDescription('Start a new giveaway')
-				.addStringOption(option =>
-					option.setName('prize')
-						.setDescription('What is the prize?')
-						.setRequired(true))
-				.addIntegerOption(option =>
-					option.setName('winners')
-						.setDescription('How many winners?')
-						.setRequired(true)
-						.setMinValue(1))
-				.addStringOption(option =>
-					option.setName('duration')
-						.setDescription('How long should the giveaway last? (1m, 1h, 1d)')
-						.setRequired(true)))
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('end')
-				.setDescription('End a giveaway early')
-				.addStringOption(option =>
-					option.setName('message_id')
-						.setDescription('The message ID of the giveaway')
-						.setRequired(true))),
+	name: 'giveaway',
+	description: 'Manage giveaways',
+	options: [
+		{
+			name: 'start',
+			description: 'Start a new giveaway',
+			type: ApplicationCommandOptionType.Subcommand,
+			options: [
+				{
+					name: 'prize',
+					description: 'What is the prize?',
+					type: ApplicationCommandOptionType.String,
+					required: true,
+				},
+				{
+					name: 'winners',
+					description: 'How many winners?',
+					type: ApplicationCommandOptionType.Integer,
+					required: true,
+					minValue: 1,
+				},
+				{
+					name: 'duration',
+					description: 'How long should the giveaway last? (1m, 1h, 1d)',
+					type: ApplicationCommandOptionType.String,
+					required: true,
+				},
+			],
+		},
+		{
+			name: 'end',
+			description: 'End a giveaway early',
+			type: ApplicationCommandOptionType.Subcommand,
+			options: [
+				{
+					name: 'message_id',
+					description: 'The message ID of the giveaway',
+					type: ApplicationCommandOptionType.String,
+					required: true,
+				},
+			],
+		},
+	],
 	disabled: false,
 	permissions: [ PermissionFlagsBits.ManageGuild ],
 

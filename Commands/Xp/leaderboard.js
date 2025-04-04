@@ -1,12 +1,11 @@
 /* eslint-disable no-unused-vars */
-const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { ChatInputCommandInteraction, EmbedBuilder } = require('discord.js');
 const XpSchema = require('../../database/Xp');
 const { TopLeaderboardImage } = require('../../src/utils/XpManager');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('leaderboard')
-		.setDescription('View the leaderboard of XP and levels'),
+	name: 'leaderboard',
+	description: 'View the leaderboard of XP and levels',
 	disabled: false,
 	permissions: [],
 
@@ -33,6 +32,7 @@ module.exports = {
 					if (!user.discordId) return null;
 
 					const fetchedUser = await client.users.fetch(user.discordId);
+					if (fetchedUser.bot) return null;
 					return {
 						top: index + 1,
 						tag: fetchedUser.username,

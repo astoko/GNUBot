@@ -59,13 +59,13 @@ module.exports = {
 			return await sendError('❌ Guild configuration not found.');
 		}
 
-		const commandConfig = config.commands?.find(cmd => cmd.name === command.data.name);
+		const commandConfig = config.commands?.find(cmd => cmd.name === command.name);
 
 		if (command.disabled === true || commandConfig?.disabled === true) {
 			return await sendError(`❌ Command \`${interaction.commandName}\` is disabled.`);
 		}
 
-		const cooldownKey = `${interaction.user.id}-${command.data.name}`;
+		const cooldownKey = `${interaction.user.id}-${command.name}`;
 		const timestamp = await client.commandCooldown.get(cooldownKey);
 
 		if (timestamp) {

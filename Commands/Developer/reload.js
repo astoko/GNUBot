@@ -1,27 +1,28 @@
 /* eslint-disable no-unused-vars */
 const {
 	EmbedBuilder,
-	SlashCommandBuilder,
 	PermissionFlagsBits,
 	ChatInputCommandInteraction,
+	ApplicationCommandOptionType,
 } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('reload')
-		.setDescription('Reloads commands or events for this guild')
-		.addStringOption(option =>
-			option
-				.setName('type')
-				.setDescription('What to reload')
-				.setRequired(true)
-				.addChoices(
-					{ name: 'Commands', value: 'commands' },
-					{ name: 'Events', value: 'events' },
-				),
-		),
+	name: 'reload',
+	description: 'Reloads commands or events for this guild',
+	options: [
+		{
+			name: 'type',
+			description: 'What to reload',
+			type: ApplicationCommandOptionType.String,
+			required: true,
+			choices: [
+				{ name: 'Commands', value: 'commands' },
+				{ name: 'Events', value: 'events' },
+			],
+		},
+	],
 	disabled: true,
-	permissions: [PermissionFlagsBits.Administrator],
+	permissions: [ PermissionFlagsBits.Administrator ],
 
 	/**
      * Executes the reload command

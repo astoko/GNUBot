@@ -1,17 +1,20 @@
 /* eslint-disable no-unused-vars */
-const { ChatInputCommandInteraction, EmbedBuilder, AttachmentBuilder, SlashCommandBuilder } = require('discord.js');
+const { ChatInputCommandInteraction, ApplicationCommandOptionType, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const XpSchema = require('../../database/Xp');
 const { Profile } = require('discord-arts');
+const { description } = require('./xpchange');
 
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('rank')
-		.setDescription('View someones xp and level information')
-		.addUserOption(option =>
-			option.setName('discord_user')
-				.setDescription('The discord user to get information on')
-				.setRequired(false),
-		),
+	name: 'rank',
+	description: 'View someones xp and level information',
+	options: [
+		{
+			name: 'discord_user',
+			description: 'The discord user to get information on',
+			type: ApplicationCommandOptionType.User,
+			required: true,
+		},
+	],
 	disabled: false,
 	permissions: [],
 
@@ -23,6 +26,14 @@ module.exports = {
 		await interaction.deferReply();
 
 		const member = interaction.options.getMember('discord_user') || interaction.member;
+
+		if (member.user.bot) {
+			return interaction.editReply({
+				content: "❌ You cannot manage XP for bot users!",
+				flags: ['Ephemeral']
+			});
+		}
+
 		const user = await XpSchema.findOne({ guildId: interaction.guild.id, discordId: member.id });
 		const users = await XpSchema.find({ guildId: interaction.guild.id }).sort({ level: -1 });
 
