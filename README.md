@@ -58,7 +58,7 @@ When the first release is published. It will take quite some time to make a Disc
  <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/readme/dark/Got-Stuck.png">
   <source media="(prefers-color-scheme: light)" srcset="assets/readme/light/Got-Stuck.png">
-  <img alt="License" src="assets/readme/dark/Got-Stuck.png">
+  <img alt="Got Stuck" src="assets/readme/dark/Got-Stuck.png">
  </picture>
 </h4>
 
